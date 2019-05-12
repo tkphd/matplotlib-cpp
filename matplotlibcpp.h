@@ -1072,7 +1072,7 @@ void text(Numeric x, Numeric y, const std::string& s = "")
 
 void colorbar(PyObject* mappable = NULL)
 {
-    if (mappable == NULL) {
+    if (mappable == NULL)
         throw std::runtime_error("Must call colorbar with PyObject* returned from an image, contour, surface, etc.");
     PyObject* args = PyTuple_New(1);
     PyTuple_SetItem(args, 0, mappable);
