@@ -76,6 +76,7 @@ struct _interpreter {
     PyObject *s_python_function_text;
     PyObject *s_python_function_suptitle;
     PyObject *s_python_function_bar;
+    PyObject *s_python_function_colorbar;
     PyObject *s_python_function_subplots_adjust;
 
 
@@ -199,6 +200,7 @@ private:
         s_python_function_text = PyObject_GetAttrString(pymod, "text");
         s_python_function_suptitle = PyObject_GetAttrString(pymod, "suptitle");
         s_python_function_bar = PyObject_GetAttrString(pymod,"bar");
+        s_python_function_colorbar = PyObject_GetAttrString(pymod, "colorbar");
         s_python_function_subplots_adjust = PyObject_GetAttrString(pymod,"subplots_adjust");
 
         if(    !s_python_function_show
@@ -233,13 +235,13 @@ private:
             || !s_python_function_clf
             || !s_python_function_annotate
             || !s_python_function_errorbar
-            || !s_python_function_errorbar
             || !s_python_function_tight_layout
             || !s_python_function_stem
             || !s_python_function_xkcd
             || !s_python_function_text
             || !s_python_function_suptitle
             || !s_python_function_bar
+            || !s_python_function_colorbar
             || !s_python_function_subplots_adjust
         ) { throw std::runtime_error("Couldn't find required function!"); }
 
@@ -281,6 +283,7 @@ private:
             || !PyFunction_Check(s_python_function_text)
             || !PyFunction_Check(s_python_function_suptitle)
             || !PyFunction_Check(s_python_function_bar)
+            || !PyFunction_Check(s_python_function_colorbar)
             || !PyFunction_Check(s_python_function_subplots_adjust)
         ) { throw std::runtime_error("Python object is unexpectedly not a PyFunction."); }
 
@@ -1151,6 +1154,20 @@ void text(Numeric x, Numeric y, const std::string& s = "")
 
     PyObject* res = PyObject_CallObject(detail::_interpreter::get().s_python_function_text, args);
     if(!res) throw std::runtime_error("Call to text() failed.");
+
+    Py_DECREF(args);
+    Py_DECREF(res);
+}
+
+void colorbar(PyObject* mappable = NULL)
+{
+    if (mappable == NULL) {
+        throw std::runtime_error("Must call colorbar with PyObject* returned from an image, contour, surface, etc.");
+    PyObject* args = PyTuple_New(1);
+    PyTuple_SetItem(args, 0, mappable);
+
+    PyObject* res = PyObject_CallObject(detail::_interpreter::get().s_python_function_colorbar, args);
+    if(!res) throw std::runtime_error("Call to colorbar() failed.");
 
     Py_DECREF(args);
     Py_DECREF(res);
