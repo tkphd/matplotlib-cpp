@@ -646,7 +646,7 @@ bool hist(const std::vector<Numeric>& y, long bins=10,std::string color="b",
 
 #ifndef WITHOUT_NUMPY
     namespace internal {
-        void imshow(void *ptr, const NPY_TYPES type, const int rows, const int columns, const int colors, const std::map<std::string, std::string> &keywords)
+        PyObject* imshow(void *ptr, const NPY_TYPES type, const int rows, const int columns, const int colors, const std::map<std::string, std::string> &keywords)
         {
             assert(type == NPY_UINT8 || type == NPY_FLOAT);
             assert(colors == 1 || colors == 3 || colors == 4);
@@ -671,21 +671,22 @@ bool hist(const std::vector<Numeric>& y, long bins=10,std::string color="b",
             if (!res)
                 throw std::runtime_error("Call to imshow() failed");
             Py_DECREF(res);
+            return res;
         }
     }
 
-    void imshow(const unsigned char *ptr, const int rows, const int columns, const int colors, const std::map<std::string, std::string> &keywords = {})
+    PyObject* imshow(const unsigned char *ptr, const int rows, const int columns, const int colors, const std::map<std::string, std::string> &keywords = {})
     {
-        internal::imshow((void *) ptr, NPY_UINT8, rows, columns, colors, keywords);
+        return internal::imshow((void *) ptr, NPY_UINT8, rows, columns, colors, keywords);
     }
 
-    void imshow(const float *ptr, const int rows, const int columns, const int colors, const std::map<std::string, std::string> &keywords = {})
+    PyObject* imshow(const float *ptr, const int rows, const int columns, const int colors, const std::map<std::string, std::string> &keywords = {})
     {
-        internal::imshow((void *) ptr, NPY_FLOAT, rows, columns, colors, keywords);
+        return internal::imshow((void *) ptr, NPY_FLOAT, rows, columns, colors, keywords);
     }
 
 #ifdef WITH_OPENCV
-    void imshow(const cv::Mat &image, const std::map<std::string, std::string> &keywords = {})
+    PyObject* imshow(const cv::Mat &image, const std::map<std::string, std::string> &keywords = {})
     {
         // Convert underlying type of matrix, if needed
         cv::Mat image2;
@@ -711,7 +712,7 @@ bool hist(const std::vector<Numeric>& y, long bins=10,std::string color="b",
             cv::cvtColor(image2, image2, CV_BGRA2RGBA);
         }
 
-        internal::imshow(image2.data, npy_type, image2.rows, image2.cols, image2.channels(), keywords);
+        return internal::imshow(image2.data, npy_type, image2.rows, image2.cols, image2.channels(), keywords);
     }
 #endif
 #endif
