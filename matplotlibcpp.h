@@ -1070,17 +1070,24 @@ void text(Numeric x, Numeric y, const std::string& s = "")
     Py_DECREF(res);
 }
 
-void colorbar(PyObject* mappable = NULL)
+void colorbar(PyObject* mappable = NULL, const std::map<std::string, float>& keywords = {})
 {
     if (mappable == NULL)
         throw std::runtime_error("Must call colorbar with PyObject* returned from an image, contour, surface, etc.");
     PyObject* args = PyTuple_New(1);
     PyTuple_SetItem(args, 0, mappable);
 
-    PyObject* res = PyObject_CallObject(detail::_interpreter::get().s_python_function_colorbar, args);
+    PyObject* kwargs = PyDict_New();
+    for(std::map<std::string, float>::const_iterator it = keywords.begin(); it != keywords.end(); ++it)
+    {
+        PyDict_SetItemString(kwargs, it->first.c_str(), PyFloat_FromDouble(it->second));
+    }
+
+    PyObject* res = PyObject_Call(detail::_interpreter::get().s_python_function_colorbar, args, kwargs);
     if(!res) throw std::runtime_error("Call to colorbar() failed.");
 
     Py_DECREF(args);
+    Py_DECREF(kwargs);
     Py_DECREF(res);
 }
 
