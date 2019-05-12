@@ -1,4 +1,4 @@
-examples: minimal basic modern animation nonblock xkcd quiver bar surface fill_inbetween fill update imshow
+examples: minimal basic modern animation nonblock xkcd quiver bar surface fill_inbetween fill update imshow subplot2grid
 
 minimal: examples/minimal.cpp matplotlibcpp.h
 	cd examples && g++ -DWITHOUT_NUMPY minimal.cpp -I/usr/include/python2.7 -lpython2.7 -o minimal -std=c++11
@@ -39,5 +39,8 @@ update: examples/update.cpp matplotlibcpp.h
 imshow: examples/imshow.cpp matplotlibcpp.h
 	cd examples && g++ imshow.cpp -I/usr/include/python2.7 -lpython2.7 -o imshow -std=c++11
 
+subplot2grid: examples/subplot2grid.cpp matplotlibcpp.h
+	cd examples && g++ subplot2grid.cpp -I/usr/include/python2.7 -lpython2.7 -o subplot2grid -std=c++11
+
 clean:
-	rm -f examples/{minimal,basic,modern,animation,nonblock,xkcd,quiver,bar,surface,fill_inbetween,fill,update,imshow}
+	rm -f examples/{minimal,basic,modern,animation,nonblock,xkcd,quiver,bar,surface,fill_inbetween,fill,update,imshow,subplot2grid}

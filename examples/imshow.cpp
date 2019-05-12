@@ -23,5 +23,5 @@ int main()
     plt::imshow(zptr, nrows, ncols, colors);
 
     // Show plots
-    plt::save("imshow.png");
+    plt::show();
 }
