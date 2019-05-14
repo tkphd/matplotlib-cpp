@@ -33,3 +33,16 @@
 
 # Build
 /examples/build/*
+examples/animation
+examples/bar
+examples/basic
+examples/fill
+examples/fill_inbetween
+examples/minimal
+examples/modern
+examples/nonblock
+examples/quiver
+examples/surface
+examples/update
+examples/xkcd
+
