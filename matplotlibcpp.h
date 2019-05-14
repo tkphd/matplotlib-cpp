@@ -604,6 +604,7 @@ bool hist(const std::vector<Numeric>& y, long bins=10,std::string color="b",
             Py_DECREF(kwargs);
             if (!res)
                 throw std::runtime_error("Call to imshow() failed");
+            Py_DECREF(res);
             return res;
         }
     }
